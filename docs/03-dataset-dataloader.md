@@ -1,8 +1,8 @@
 # 03. Dataset 与 DataLoader
 
-`Dataset` 负责“按索引拿一个样本”，`DataLoader` 负责“把很多样本组装成 batch”。
+`Dataset` 定义单个样本的读取方式，`DataLoader` 负责 batch、shuffle 和多进程加载。
 
-一个最小 Dataset：
+最小 Dataset：
 
 ```python
 from torch.utils.data import Dataset
@@ -20,7 +20,7 @@ class MyDataset(Dataset):
         return self.features[index], self.labels[index]
 ```
 
-再交给 DataLoader：
+交给 DataLoader：
 
 ```python
 from torch.utils.data import DataLoader
@@ -33,14 +33,14 @@ for features, labels in loader:
 
 ## shuffle 该怎么用
 
-- 训练集通常 `shuffle=True`，让模型不要按固定顺序看数据。
-- 验证集通常 `shuffle=False`，便于复现实验和排查问题。
+- 训练集通常 `shuffle=True`。
+- 验证集通常 `shuffle=False`，便于复现。
 
 ## batch size 的取舍
 
-batch size 不是越大越好。太小会让训练曲线抖动明显，太大可能显存不够，也可能让模型更新不够灵活。
+batch size 会影响显存占用和梯度估计稳定性。
 
-初学时可以从 32、64、128 这几个数试起。
+常用起点：32、64、128。
 
 ## 随机切分
 
@@ -55,5 +55,4 @@ train_set, val_set = random_split(
 )
 ```
 
-固定 seed 不是迷信，它能让你下次复查问题时看到同样的数据切分。
-
+固定 seed 可以复现同样的数据切分。

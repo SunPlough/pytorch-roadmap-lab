@@ -1,6 +1,6 @@
 # 06. PyTorch 排错清单
 
-先打印，再猜。下面这些检查能解决很多初学阶段的问题。
+常见训练问题可以按下面顺序检查。
 
 ## 维度错误
 
@@ -29,7 +29,7 @@ features = features.to(device)
 labels = labels.to(device)
 ```
 
-不要只移动 features，labels 也要移动。
+features 和 labels 都需要移动到同一 device。
 
 ## loss 不下降
 
@@ -55,7 +55,6 @@ for name, parameter in model.named_parameters():
 
 ## 快速缩小问题
 
-- 用 32 个样本训练到接近 100% accuracy。做不到，优先怀疑代码。
-- 把模型换成更小的版本。小模型能跑，大模型不行，再看容量和学习率。
-- 固定 seed，保证每次复现的是同一个问题。
-
+- 用 32 个样本做 overfit 测试。
+- 把模型换成更小版本，确认训练循环可用。
+- 固定 seed，复现同一个问题。
